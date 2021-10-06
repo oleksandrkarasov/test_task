@@ -31,7 +31,9 @@ tweetsData<-tweetsData%>%
 	mutate(ave_sentiment_median=median(ave_sentiment,na.rm=FALSE))%>%
 	ungroup()
 
+
 #Twitter users ranged by sentiment polarity of their tweets
+windows(30,15) 
 ggplot(tweetsData, aes(x=reorder(rand_id,ave_sentiment_median)))+
 	geom_violin(aes(y=ave_sentiment),fill="purple", width=1.5, color="#502c6b")+
 	theme_minimal()+
@@ -40,5 +42,3 @@ ggplot(tweetsData, aes(x=reorder(rand_id,ave_sentiment_median)))+
 	ggtitle("Twitter's sentiment polarity") +
 	xlab("User ID")+
 	ylab("Sentiment score")
-
-windows(30,15)
