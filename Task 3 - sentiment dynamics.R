@@ -14,7 +14,7 @@ library(tidyverse)
 library(lubridate)
 library(zoo)
 
-#Open data (workind directory is assumed)
+# Open data (workind directory is assumed)
 twitter_df = read.csv("twitter_sample_data.csv", header= TRUE, encoding="UTF-8")
 head(twitter_df)
 
@@ -28,13 +28,13 @@ str(twitter_df)
 
 twitter_df$rand_id<-as.factor(twitter_df$rand_id)
 
-#Median calculation for tweets by rand_id
+# Median calculation for tweets by rand_id
 twitter_df<-twitter_df%>%
 	group_by(rand_id)%>%
 	mutate(ave_sentiment_median=median(ave_sentiment,na.rm=FALSE))%>%
 	ungroup()
 
-#Twitter users ranged by sentiment polarity of their tweets
+# Twitter users ranged by sentiment polarity of their tweets
 windows(45,15)
 ggplot(twitter_df, aes(x=reorder(rand_id,ave_sentiment_median)))+
 	geom_violin(aes(y=ave_sentiment),fill="purple", width=1.5, color="#502c6b")+
@@ -45,13 +45,13 @@ ggplot(twitter_df, aes(x=reorder(rand_id,ave_sentiment_median)))+
 	xlab("User ID")+
 	ylab("Sentiment score")
 
-##Plot by date
-#get the date column
+# Plot by date
+# Get the date column
 twitter_df$date<-ymd_hms(twitter_df$created_at)
 twitter_df$my<-format(twitter_df$date, format="%Y-%m")
 twitter_df$my<-as.yearmon(twitter_df$my)
 
-#median ave_sentiment per month
+# Median ave_sentiment per month
 twitter_df<-twitter_df%>%
 		group_by(my)%>%
 		mutate(median_sentiment=median(ave_sentiment,na.rm =TRUE),
@@ -59,9 +59,10 @@ twitter_df<-twitter_df%>%
 		ungroup()
 str(twitter_df)
 
-#get unique values for plotting
+# Get unique values for plotting
 twitter_df2<-twitter_df%>%select(median_sentiment,my,sd_sentiment )%>%unique()
 
+# Final visualisation
 windows(30,20)
 ggplot(data=twitter_df2,aes(x=my))+
 	geom_segment(aes(x = my, y = (median_sentiment-sd_sentiment), xend = my, 
